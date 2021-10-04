@@ -1,5 +1,3 @@
-#include <math.h>
-
 // Arduino pin assignment
 #define PIN_LED 9
 #define PIN_TRIG 12
@@ -110,14 +108,21 @@ void loop() {
   Serial.println("Max:400");
 
 // turn on the LED if the distance is between dist_min and dist_max
- while (1)
-{
-   float light = 0;
-   light += abs(200 - dist_raw) * (255/100);
-   analogWrite (PIN_LED, light);
+ if(dist_raw >= 100 || dist_raw <= 200)
+  {
+    float light = 255;
+    for(dist_raw = 100; dist_raw < 200 ; dist_raw ++)
+    light = 255 - (255 * (dist_raw - 100)/100);
+    analogWrite(PIN_LED, light);
+  }
 
-   delay(25);
-}
+  else if(dist_raw > 200 || dist_raw <= 300)
+  {
+    float light = 255;
+    for(dist_raw = 200; dist_raw < 300 ; dist_raw ++)
+    light = (255 * (dist_raw - 200)/100);
+    analogWrite(PIN_LED, light);
+  }
 
 // update last sampling time
   last_sampling_time += INTERVAL;
